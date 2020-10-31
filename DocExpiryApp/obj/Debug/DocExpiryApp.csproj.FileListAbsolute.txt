@@ -1,7 +1,0 @@
-C:\Users\Hussain\Desktop\repos\DocExpiryApp\DocExpiryApp\bin\Debug\DocExpiryApp.exe
-C:\Users\Hussain\Desktop\repos\DocExpiryApp\DocExpiryApp\bin\Debug\DocExpiryApp.pdb
-C:\Users\Hussain\Desktop\repos\DocExpiryApp\DocExpiryApp\obj\Debug\DocExpiryApp.csprojResolveAssemblyReference.cache
-C:\Users\Hussain\Desktop\repos\DocExpiryApp\DocExpiryApp\obj\Debug\DocExpiryApp.exe
-C:\Users\Hussain\Desktop\repos\DocExpiryApp\DocExpiryApp\obj\Debug\DocExpiryApp.pdb
-C:\Users\Hussain\Desktop\repos\DocExpiryApp\DocExpiryApp\bin\Debug\db\docexpirydb.mdb
-C:\Users\Hussain\Desktop\repos\DocExpiryApp\DocExpiryApp\bin\Debug\DocExpiryApp.exe.config
