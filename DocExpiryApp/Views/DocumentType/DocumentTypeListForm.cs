@@ -22,8 +22,6 @@ namespace DocExpiryApp.Views
         protected DataGridView dataGridView;
         public DocumentTypeListForm() : base()
         {
-            this.RightToLeftLayout = this["RightToLeftLayout"].Equals("yes");
-            this.RightToLeft = this.RightToLeftLayout ? RightToLeft.Yes : RightToLeft.Inherit;
             this.Text = this["Document Types"];
             this.Width = 375;
             this.Height = 400;
@@ -35,7 +33,8 @@ namespace DocExpiryApp.Views
                 Height = 280,
                 Left   = 10,
                 Top    = 70,
-                AutoGenerateColumns = true,
+                AutoGenerateColumns = false,
+                MultiSelect = false,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells,
                 AllowUserToDeleteRows = false,
                 AllowUserToResizeRows = false,
@@ -44,6 +43,9 @@ namespace DocExpiryApp.Views
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
                 ReadOnly = true
             };
+
+            new[]{"Id","DocumentTypeName"}.ToList().ForEach(c => dataGridView.Columns.Add(c,this[c]));            
+            
 
             this.btnNewDocumentType = new Button{
                 Left = 10,
@@ -94,7 +96,7 @@ namespace DocExpiryApp.Views
             this.btnDeleteDocumentType.Click += new EventHandler(btnDeleteDocumentType_Click);
             this.btnEditDocumentType.Click += new EventHandler(btnEditDocumentType_Click); 
             this.txtSearch.TextChanged += new EventHandler(txtSearch_TextChanged);
-
+            this.dataGridView.CellDoubleClick += new DataGridViewCellEventHandler(dataGridView_CellDoubleClick);
             //Adding Controls to Form
             new Control[]
             {
@@ -109,14 +111,24 @@ namespace DocExpiryApp.Views
             
         }
 
-        protected void Form_Load(object sender, EventArgs eventArgs)
+        protected void dataGridView_CellDoubleClick(object sender,DataGridViewCellEventArgs ea)
+        {
+            btnEditDocumentType_Click(sender,null);
+        }
+
+        protected void requery()
         {
             datasource = new DocumentTypeController().SelectAll();
             this.dataGridView.DataSource = datasource;
+        }
+
+        protected void Form_Load(object sender, EventArgs eventArgs)
+        {
+            requery();
             this.dataGridView.Columns
                 .Cast<DataGridViewColumn>()
                 .ToList()
-                .ForEach(x => {x.HeaderText = this[x.HeaderText]; x.Name = x.HeaderText;});
+                .ForEach(x => x.DataPropertyName = x.Name);
             dataGridView.Refresh();
             this.Invalidate();
             this.Refresh();
@@ -130,15 +142,38 @@ namespace DocExpiryApp.Views
         }
         protected void btnNewDocumentType_Click(object sender, EventArgs eventArgs)
         {
-            new DocumentTypeForm().Show();
+            new DocumentTypeForm(){
+                OnSuccess = delegate(string message){
+                    requery();
+                }
+            }.Show();
         }
         protected void btnEditDocumentType_Click(object sender, EventArgs eventArgs)
         {
-
+            new DocumentTypeForm(){
+                Model = GetSelectedModel(),
+                OnSuccess = delegate(string message){
+                    requery();
+                }
+            }.Show();
         }
+
+        public DocumentType GetSelectedModel()
+        {
+            if(dataGridView.SelectedRows.Count==0) return null;
+            var row = dataGridView.SelectedRows[0] as DataGridViewRow;
+            return new DocumentType{
+                Id = int.Parse(row.Cells["Id"].Value.ToString()),
+                DocumentTypeName = row.Cells["DocumentTypeName"].Value.ToString()
+            };
+        }
+        
         protected void btnDeleteDocumentType_Click(object sender, EventArgs eventArgs)
         {
-
+            if(dataGridView.SelectedRows.Count==0) return;
+            if(new DocumentTypeController().Delete(GetSelectedModel())){
+                requery();
+            }
         }
     }
 }

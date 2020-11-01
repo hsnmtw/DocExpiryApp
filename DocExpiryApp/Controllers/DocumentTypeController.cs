@@ -19,6 +19,11 @@ namespace DocExpiryApp.Controllers
             return new List<DocumentType>();
         }
 
+        public bool Delete(DocumentType documentType)
+        {
+            return database.Delete(documentType) > 0;
+        }
+
         public bool Save(DocumentType documentType)
         {
             try

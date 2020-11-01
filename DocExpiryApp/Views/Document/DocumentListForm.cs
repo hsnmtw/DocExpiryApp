@@ -22,8 +22,6 @@ namespace DocExpiryApp.Views
         protected DataGridView dataGridView;
         public DocumentListForm() : base()
         {
-            this.RightToLeftLayout = this["RightToLeftLayout"].Equals("yes");
-            this.RightToLeft = this.RightToLeftLayout ? RightToLeft.Yes : RightToLeft.Inherit;
             this.Text = this["Document Expiry Tracker Application"];
             this.Width = 575;
             this.Height = 400;
@@ -35,7 +33,8 @@ namespace DocExpiryApp.Views
                 Height = 280,
                 Left   = 10,
                 Top    = 70,
-                AutoGenerateColumns = true,
+                AutoGenerateColumns = false,
+                MultiSelect = false,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells,
                 AllowUserToDeleteRows = false,
                 AllowUserToResizeRows = false,
@@ -44,6 +43,14 @@ namespace DocExpiryApp.Views
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
                 ReadOnly = true
             };
+
+            new[]{
+                "Id"
+                ,"DocumentNumber"
+                ,"DocumentType"
+                ,"ExpiryDate"
+                ,"RemainingDays"
+            }.ToList().ForEach(c => dataGridView.Columns.Add(c,this[c]));
 
             this.btnNewDocument = new Button{
                 Left = 10,
@@ -108,7 +115,7 @@ namespace DocExpiryApp.Views
             this.dataGridView.Columns
                 .Cast<DataGridViewColumn>()
                 .ToList()
-                .ForEach(x => {x.HeaderText = this[x.HeaderText]; x.Name = x.HeaderText;});
+                .ForEach(x => x.DataPropertyName = x.Name );
             dataGridView.Refresh();
             this.Invalidate();
             this.Refresh();
