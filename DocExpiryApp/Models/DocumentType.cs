@@ -3,7 +3,7 @@ using PetaPoco;
 
 namespace DocExpiryApp.Models
 {
-    [TableName("Document"),PrimaryKey("Id",AutoIncrement = true)]
+    [TableName("DocumentType"),PrimaryKey("Id",AutoIncrement = true)]
     public class DocumentType
     {
         [ResultColumn]

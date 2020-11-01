@@ -7,35 +7,31 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PetaPoco;
 using DocExpiryApp.Models;
 using DocExpiryApp.Controllers;
 
 namespace DocExpiryApp.Views
 {
-    public class DocumentTypeListForm : Form
+    public class DocumentTypeListForm : BaseView
     {
-        protected string this[string name] {get{return ConfigController.Instance[name];}}
 
         private Button btnNewDocumentType,btnDeleteDocumentType,btnEditDocumentType;
         private Label lblSearch;
         private TextBox txtSearch;
         private List<DocumentType> datasource;
-        protected IDatabase db;
         protected DataGridView dataGridView;
         public DocumentTypeListForm() : base()
         {
-            this.db = new Database("db");
             this.RightToLeftLayout = this["RightToLeftLayout"].Equals("yes");
             this.RightToLeft = this.RightToLeftLayout ? RightToLeft.Yes : RightToLeft.Inherit;
             this.Text = this["Document Types"];
-            this.Width = 575;
+            this.Width = 375;
             this.Height = 400;
             this.MinimumSize = new Size(375,400);
             
             this.dataGridView = new DataGridView{
                 Anchor = AnchorStyles.Bottom | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left,
-                Width  = 540,
+                Width  = 340,
                 Height = 280,
                 Left   = 10,
                 Top    = 70,
@@ -88,7 +84,7 @@ namespace DocExpiryApp.Views
             this.txtSearch = new TextBox{
                 Left = 70,
                 Top = 40,
-                Width = 480,
+                Width = 280,
                 Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left,
             };
 
@@ -115,15 +111,7 @@ namespace DocExpiryApp.Views
 
         protected void Form_Load(object sender, EventArgs eventArgs)
         {
-            try
-            {
-                datasource = db.Fetch<DocumentType>(this["sql.documenttypes.query"]);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message,this["Error while connecting to Database"],MessageBoxButtons.OK,MessageBoxIcon.Error);
-            }
-
+            datasource = new DocumentTypeController().SelectAll();
             this.dataGridView.DataSource = datasource;
             this.dataGridView.Columns
                 .Cast<DataGridViewColumn>()
@@ -142,7 +130,7 @@ namespace DocExpiryApp.Views
         }
         protected void btnNewDocumentType_Click(object sender, EventArgs eventArgs)
         {
-
+            new DocumentTypeForm().Show();
         }
         protected void btnEditDocumentType_Click(object sender, EventArgs eventArgs)
         {

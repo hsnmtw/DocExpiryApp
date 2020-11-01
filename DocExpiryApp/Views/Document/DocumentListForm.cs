@@ -7,25 +7,21 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PetaPoco;
 using DocExpiryApp.Models;
 using DocExpiryApp.Controllers;
 
 namespace DocExpiryApp.Views
 {
-    public class DocumentListForm : Form
+    public class DocumentListForm : BaseView
     {
-        protected string this[string name] {get{return ConfigController.Instance[name];}}
-
         private Button btnDocumentAttribute, btnDocumentType, btnNewDocument;
         private Label lblSearch;
         private TextBox txtSearch;
-        private List<Document> documents;
-        protected IDatabase db;
+        private List<Document> datasource;
+        
         protected DataGridView dataGridView;
         public DocumentListForm() : base()
         {
-            this.db = new Database("db");
             this.RightToLeftLayout = this["RightToLeftLayout"].Equals("yes");
             this.RightToLeft = this.RightToLeftLayout ? RightToLeft.Yes : RightToLeft.Inherit;
             this.Text = this["Document Expiry Tracker Application"];
@@ -107,16 +103,8 @@ namespace DocExpiryApp.Views
 
         protected void Form_Load(object sender, EventArgs eventArgs)
         {
-            try
-            {
-                documents = db.Fetch<Document>(this["sql.documents.query"]);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message,this["Error while connecting to Database"],MessageBoxButtons.OK,MessageBoxIcon.Error);
-            }
-
-            this.dataGridView.DataSource = documents;
+            datasource = new DocumentController().SelectAll();
+            this.dataGridView.DataSource = datasource;
             this.dataGridView.Columns
                 .Cast<DataGridViewColumn>()
                 .ToList()
@@ -129,7 +117,7 @@ namespace DocExpiryApp.Views
         protected void txtSearch_TextChanged(object sender, EventArgs eventArgs)
         {
             var tx = sender as TextBox;
-            dataGridView.DataSource = documents.Where(x => x.DocumentNumber.Contains(tx.Text)).ToList();
+            dataGridView.DataSource = datasource.Where(x => x.DocumentNumber.Contains(tx.Text)).ToList();
             dataGridView.Refresh();
         }
         protected void btnDocumentType_Click(object sender, EventArgs eventArgs)
