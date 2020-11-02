@@ -12,19 +12,19 @@ using DocExpiryApp.Controllers;
 
 namespace DocExpiryApp.Views
 {
-    public class DocumentTypeListForm : BaseView
+    public class FeatureListForm : BaseView
     {
 
-        private Button btnNewDocumentType,btnDeleteDocumentType,btnEditDocumentType;
+        private Button btnNewFeature,btnDeleteFeature,btnEditFeature;
         private Label lblSearch;
         private TextBox txtSearch;
         
 
-        private List<DocumentType> datasource;
+        private List<Feature> datasource;
         protected DataGridView dataGridView;
-        public DocumentTypeListForm() : base()
+        public FeatureListForm() : base()
         {
-            this.Text = this["Document Types"];
+            this.Text = this["Features"];
             this.Width = 375;
             this.Height = 400;
             this.MinimumSize = new Size(375,400);
@@ -49,32 +49,32 @@ namespace DocExpiryApp.Views
 
             new[]{
                 "Id",
-                "DocumentTypeName"
+                "FeatureName"
             }.ToList().ForEach(c => dataGridView.Columns.Add(c,this[c]));            
             
 
-            this.btnNewDocumentType = new Button{
+            this.btnNewFeature = new Button{
                 Left = 10,
                 Top  = 10,
                 Width= 100,
-                Text = this["New Document Type"]
+                Text = this["New Feature"]
             };
 
-            this.btnNewDocumentType = new Button{
+            this.btnNewFeature = new Button{
                 Left = 10,
                 Top  = 10,
                 Width= 100,
                 Text = this["New"]
             };
 
-            this.btnEditDocumentType = new Button{
+            this.btnEditFeature = new Button{
                 Left = 130,
                 Top  = 10,
                 Width= 100,
                 Text = this["Edit"]
             };
 
-            this.btnDeleteDocumentType = new Button{
+            this.btnDeleteFeature = new Button{
                 Left = 250,
                 Top  = 10,
                 Width= 100,
@@ -99,15 +99,15 @@ namespace DocExpiryApp.Views
             //Event Handlers
             this.Load += new EventHandler(Form_Load);
             
-            this.btnNewDocumentType.Click += new EventHandler(btnNewDocumentType_Click);
-            this.btnDeleteDocumentType.Click += new EventHandler(btnDeleteDocumentType_Click);
-            this.btnEditDocumentType.Click += new EventHandler(btnEditDocumentType_Click); 
+            this.btnNewFeature.Click += new EventHandler(btnNewFeature_Click);
+            this.btnDeleteFeature.Click += new EventHandler(btnDeleteFeature_Click);
+            this.btnEditFeature.Click += new EventHandler(btnEditFeature_Click); 
             this.txtSearch.TextChanged += new EventHandler(txtSearch_TextChanged);
             this.dataGridView.CellDoubleClick += new DataGridViewCellEventHandler(dataGridView_CellDoubleClick);
             this.dataGridView.MouseClick += new MouseEventHandler(dataGridView_MouseClick);
             
-            this.contextMenuStrip.Items.Add(this["Edit"]).Click += new EventHandler(btnEditDocumentType_Click);
-            this.contextMenuStrip.Items.Add(this["Delete"]).Click += new EventHandler(btnDeleteDocumentType_Click);
+            this.contextMenuStrip.Items.Add(this["Edit"]).Click += new EventHandler(btnEditFeature_Click);
+            this.contextMenuStrip.Items.Add(this["Delete"]).Click += new EventHandler(btnDeleteFeature_Click);
             
 
             //Adding Controls to Form
@@ -116,9 +116,9 @@ namespace DocExpiryApp.Views
                 lblSearch,
                 txtSearch,
                 dataGridView,                
-                btnNewDocumentType,
-                btnEditDocumentType,
-                btnDeleteDocumentType,
+                btnNewFeature,
+                btnEditFeature,
+                btnDeleteFeature,
             }
             .ToList().ForEach(x => Controls.Add(x));
             
@@ -137,12 +137,12 @@ namespace DocExpiryApp.Views
 
         protected void dataGridView_CellDoubleClick(object sender,DataGridViewCellEventArgs ea)
         {
-            btnEditDocumentType_Click(sender,null);
+            btnEditFeature_Click(sender,null);
         }
 
         protected void requery()
         {
-            datasource = new DocumentTypeController().SelectAll();
+            datasource = new FeatureController().SelectAll();
             this.dataGridView.DataSource = datasource;
         }
 
@@ -161,20 +161,20 @@ namespace DocExpiryApp.Views
         protected void txtSearch_TextChanged(object sender, EventArgs eventArgs)
         {
             var tx = sender as TextBox;
-            dataGridView.DataSource = datasource.Where(x => x.DocumentTypeName.Contains(tx.Text)).ToList();
+            dataGridView.DataSource = datasource.Where(x => x.FeatureName.Contains(tx.Text)).ToList();
             dataGridView.Refresh();
         }
-        protected void btnNewDocumentType_Click(object sender, EventArgs eventArgs)
+        protected void btnNewFeature_Click(object sender, EventArgs eventArgs)
         {
-            new DocumentTypeForm(){
+            new FeatureForm(){
                 OnSuccess = delegate(string message){
                     requery();
                 }
             }.Show();
         }
-        protected void btnEditDocumentType_Click(object sender, EventArgs eventArgs)
+        protected void btnEditFeature_Click(object sender, EventArgs eventArgs)
         {
-            new DocumentTypeForm(){
+            new FeatureForm(){
                 Model = GetSelectedModel(),
                 OnSuccess = delegate(string message){
                     requery();
@@ -182,20 +182,20 @@ namespace DocExpiryApp.Views
             }.Show();
         }
 
-        public DocumentType GetSelectedModel()
+        public Feature GetSelectedModel()
         {
             if(dataGridView.SelectedRows.Count==0) return null;
             var row = dataGridView.SelectedRows[0] as DataGridViewRow;
-            return new DocumentType{
+            return new Feature{
                 Id = int.Parse(row.Cells["Id"].Value.ToString()),
-                DocumentTypeName = row.Cells["DocumentTypeName"].Value.ToString()
+                FeatureName = row.Cells["FeatureName"].Value.ToString()
             };
         }
         
-        protected void btnDeleteDocumentType_Click(object sender, EventArgs eventArgs)
+        protected void btnDeleteFeature_Click(object sender, EventArgs eventArgs)
         {
             if(dataGridView.SelectedRows.Count==0) return;
-            if(new DocumentTypeController().Delete(GetSelectedModel())){
+            if(new FeatureController().Delete(GetSelectedModel())){
                 requery();
             }
         }

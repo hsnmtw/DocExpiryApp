@@ -15,7 +15,7 @@ namespace DocExpiryApp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Views.DocumentListForm());
+            Application.Run(new Views.MainForm());
         }
     }
 }

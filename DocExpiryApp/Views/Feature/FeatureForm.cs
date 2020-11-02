@@ -6,25 +6,25 @@ using DocExpiryApp.Models;
 
 namespace DocExpiryApp.Views
 {
-    public class DocumentTypeForm : BaseView
+    public class FeatureForm : BaseView
     {
-        protected Label lblId, lblDocumentTypeName;
-        protected TextBox txtId, txtDocumentTypeName;
+        protected Label lblId, lblFeatureName;
+        protected TextBox txtId, txtFeatureName;
         protected Button btnSave, btnCancel;
-        public DocumentType Model {
-            get{ return new DocumentType{
+        public Feature Model {
+            get{ return new Feature{
                 Id = int.Parse("0"+txtId.Text),
-                DocumentTypeName = txtDocumentTypeName.Text 
+                FeatureName = txtFeatureName.Text 
             };}
             set{
-                var model = (value==null)? new DocumentType():value;
+                var model = (value==null)? new Feature():value;
                 txtId.Text = model.Id.ToString();
-                txtDocumentTypeName.Text = model.DocumentTypeName;
+                txtFeatureName.Text = model.FeatureName;
             }
         }
-        public DocumentTypeForm() : base()
+        public FeatureForm() : base()
         {
-            Text = this["Document Types"];
+            Text = this["Features"];
             Size = new System.Drawing.Size(300,150);
             MinimumSize = Size;
             MaximumSize = Size;
@@ -37,9 +37,9 @@ namespace DocExpiryApp.Views
                 Location = new System.Drawing.Point(10,15),
                 Text = this["Id"],
             };
-            lblDocumentTypeName = new Label{
+            lblFeatureName = new Label{
                 Location = new System.Drawing.Point(10,45),
-                Text = this["DocumentTypeName"],
+                Text = this["FeatureName"],
             };
             txtId = new TextBox{
                 Location = new System.Drawing.Point(110,10),
@@ -47,7 +47,7 @@ namespace DocExpiryApp.Views
                 Enabled = false,
                 Text = "0",
             };
-            txtDocumentTypeName = new TextBox{
+            txtFeatureName = new TextBox{
                 Location = new System.Drawing.Point(110,40)
             };
             btnSave = new Button{
@@ -67,8 +67,8 @@ namespace DocExpiryApp.Views
             {
                 lblId,
                 txtId,
-                lblDocumentTypeName,
-                txtDocumentTypeName,
+                lblFeatureName,
+                txtFeatureName,
                 btnSave,
                 btnCancel,
             }
@@ -76,7 +76,7 @@ namespace DocExpiryApp.Views
         }
         protected void btnSave_Click(object sender, EventArgs eventArgs)
         {
-            bool result = new DocumentTypeController().Save(Model);
+            bool result = new FeatureController().Save(Model);
             LogController.Information(result);
             if(result){
                 OnSuccess("insert/update successful");

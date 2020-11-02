@@ -14,7 +14,7 @@ namespace DocExpiryApp.Views
 {
     public class DocumentListForm : BaseView
     {
-        private Button btnDocumentAttribute, btnDocumentType, btnNewDocument;
+        private Button btnDocumentFeature, btnDocumentType, btnNewDocument, btnAllFeatures;
         private Label lblSearch;
         private TextBox txtSearch;
         private List<Document> datasource;
@@ -59,18 +59,25 @@ namespace DocExpiryApp.Views
                 Text = this["New Document"]
             };
 
-            this.btnDocumentAttribute = new Button{
+            this.btnDocumentFeature = new Button{
                 Left = 130,
                 Top  = 10,
                 Width= 100,
-                Text = this["Document Attributes"]
+                Text = this["Document Feature"]
             };
             
             this.btnDocumentType = new Button{
                 Left = 250,
                 Top  = 10,
                 Width= 100,
-                Text = this["Document Types"]
+                Text = this["All Document Types"]
+            };
+
+            this.btnAllFeatures = new Button{
+                Left  = 400,
+                Top   = 10,
+                Width = 100,
+                Text  = this["All Features"]
             };
 
             this.lblSearch = new Label{
@@ -91,7 +98,8 @@ namespace DocExpiryApp.Views
             this.Load += new EventHandler(Form_Load);
             this.btnNewDocument.Click += new EventHandler(btnNewDocument_Click);
             this.btnDocumentType.Click += new EventHandler(btnDocumentType_Click);
-            this.btnDocumentAttribute.Click += new EventHandler(btnDocumentAttribute_Click); 
+            this.btnDocumentFeature.Click += new EventHandler(btnDocumentFeature_Click); 
+            this.btnAllFeatures.Click += new EventHandler(btnAllFeatures_Click);
             this.txtSearch.TextChanged += new EventHandler(txtSearch_TextChanged);
 
             //Adding Controls to Form
@@ -101,8 +109,9 @@ namespace DocExpiryApp.Views
                 txtSearch,
                 dataGridView,
                 btnNewDocument,
-                btnDocumentAttribute,
+                btnDocumentFeature,
                 btnDocumentType,
+                btnAllFeatures,
             }
             .ToList().ForEach(x => Controls.Add(x));
             
@@ -121,6 +130,11 @@ namespace DocExpiryApp.Views
             this.Refresh();
         }
 
+        protected void btnAllFeatures_Click(object sender, EventArgs eventArgs)
+        {
+            new FeatureListForm().Show();
+        }
+
         protected void txtSearch_TextChanged(object sender, EventArgs eventArgs)
         {
             var tx = sender as TextBox;
@@ -135,7 +149,7 @@ namespace DocExpiryApp.Views
         {
 
         }
-        protected void btnDocumentAttribute_Click(object sender, EventArgs eventArgs)
+        protected void btnDocumentFeature_Click(object sender, EventArgs eventArgs)
         {
 
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using DocExpiryApp.Controllers;
@@ -6,25 +7,25 @@ using DocExpiryApp.Models;
 
 namespace DocExpiryApp.Views
 {
-    public class DocumentTypeForm : BaseView
+    public class EnumerationForm : BaseView
     {
-        protected Label lblId, lblDocumentTypeName;
-        protected TextBox txtId, txtDocumentTypeName;
+        protected Label lblId, lblEnumerationName;
+        protected TextBox txtId, txtEnumerationName;
         protected Button btnSave, btnCancel;
-        public DocumentType Model {
-            get{ return new DocumentType{
+        public Enumeration Model {
+            get{ return new Enumeration{
                 Id = int.Parse("0"+txtId.Text),
-                DocumentTypeName = txtDocumentTypeName.Text 
+                EnumerationName = txtEnumerationName.Text 
             };}
             set{
-                var model = (value==null)? new DocumentType():value;
+                var model = (value==null)? new Enumeration():value;
                 txtId.Text = model.Id.ToString();
-                txtDocumentTypeName.Text = model.DocumentTypeName;
+                txtEnumerationName.Text = model.EnumerationName;
             }
         }
-        public DocumentTypeForm() : base()
+        public EnumerationForm() : base()
         {
-            Text = this["Document Types"];
+            Text = this["Enumerations"];
             Size = new System.Drawing.Size(300,150);
             MinimumSize = Size;
             MaximumSize = Size;
@@ -34,28 +35,28 @@ namespace DocExpiryApp.Views
 
 
             lblId = new Label{
-                Location = new System.Drawing.Point(10,15),
+                Location = new Point(10,15),
                 Text = this["Id"],
             };
-            lblDocumentTypeName = new Label{
-                Location = new System.Drawing.Point(10,45),
-                Text = this["DocumentTypeName"],
+            lblEnumerationName = new Label{
+                Location = new Point(10,45),
+                Text = this["EnumerationName"],
             };
             txtId = new TextBox{
-                Location = new System.Drawing.Point(110,10),
+                Location = new Point(110,10),
                 ReadOnly = true,
                 Enabled = false,
                 Text = "0",
             };
-            txtDocumentTypeName = new TextBox{
-                Location = new System.Drawing.Point(110,40)
+            txtEnumerationName = new TextBox{
+                Location = new Point(110,40)
             };
             btnSave = new Button{
-                Location = new System.Drawing.Point(10,70),
+                Location = new Point(10,70),
                 Text = this["Save"]
             };
             btnCancel = new Button{
-                Location = new System.Drawing.Point(110,70),
+                Location = new Point(110,70),
                 Text = this["Back"]
             };
             
@@ -67,8 +68,8 @@ namespace DocExpiryApp.Views
             {
                 lblId,
                 txtId,
-                lblDocumentTypeName,
-                txtDocumentTypeName,
+                lblEnumerationName,
+                txtEnumerationName,
                 btnSave,
                 btnCancel,
             }
@@ -76,7 +77,7 @@ namespace DocExpiryApp.Views
         }
         protected void btnSave_Click(object sender, EventArgs eventArgs)
         {
-            bool result = new DocumentTypeController().Save(Model);
+            bool result = new EnumerationController().Save(Model);
             LogController.Information(result);
             if(result){
                 OnSuccess("insert/update successful");
